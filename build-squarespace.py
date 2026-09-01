@@ -139,6 +139,7 @@ def main() -> int:
      Paste into: Settings > Advanced > Code Injection > Footer
      ====================================================================== -->
 
+<script src="{base}/assets/js/velum-form-config.js" defer></script>
 <script src="{base}/assets/js/velum.js" defer></script>
 """
     (OUT / "01-site-footer-injection.html").write_text(footer_inj, encoding="utf8")
@@ -153,19 +154,9 @@ def main() -> int:
 
         body = rewrite(head + "\n\n" + main + "\n\n" + foot, base)
 
-        # The Netlify form cannot work on Squarespace. Replace it with a marker.
-        if "contact-form" in body:
-            body = re.sub(
-                r"<form id=\"contact-form\".*?</form>",
-                "<!-- FORM: Netlify Forms does not run on Squarespace.\n"
-                "     Delete this comment, add a Squarespace Form Block here,\n"
-                "     and it will inherit the .field styles from velum.css. -->\n"
-                "        <p class=\"muted\">"
-                "<a class=\"tlink\" href=\"mailto:support@velumcorp.com\">"
-                "support@velumcorp.com</a></p>",
-                body,
-                flags=re.S,
-            )
+        # The form posts to Google Forms, so it works on Squarespace exactly as
+        # it does on Netlify. It only needs the two scripts, which the site-wide
+        # footer injection already loads.
 
         out = f"""<!-- ======================================================================
      VELUM ENTERPRISE - Squarespace page: {label}

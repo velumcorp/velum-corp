@@ -262,20 +262,42 @@
 
     form.addEventListener('submit', function (e) {
       if (!validate()) { e.preventDefault(); return; }
-      if (!window.fetch) return; /* let the browser post it the old way */
+
+      var cfg = window.VELUM_FORM || {};
+      var fields = cfg.fields || {};
+      if (!cfg.formId || !window.fetch) return;   /* not wired yet: post normally */
 
       e.preventDefault();
+
+      /* Honeypot. A real person never fills a field they cannot see, so if it
+         has content, accept the submission visually and send nothing. */
+      var hp = form.querySelector('[name="bot-field"]');
+      if (hp && hp.value.trim()) {
+        form.reset();
+        okBox.setAttribute('data-show', 'true');
+        return;
+      }
+
       okBox.setAttribute('data-show', 'false');
       errBox.setAttribute('data-show', 'false');
       submit.setAttribute('data-busy', 'true');
 
-      var data = new URLSearchParams(new FormData(form)).toString();
-      fetch(form.getAttribute('action') || '/', {
+      var body = new URLSearchParams();
+      Object.keys(fields).forEach(function (name) {
+        var entry = fields[name];
+        var input = form.elements[name];
+        if (entry && input) body.append(entry, input.value);
+      });
+
+      /* Google Forms sends no CORS headers, so the response is opaque: a
+         resolved promise means the request left the browser, not that Google
+         liked it. That is the most any cross-origin form post can tell us. */
+      fetch('https://docs.google.com/forms/d/e/' + cfg.formId + '/formResponse', {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: data
-      }).then(function (res) {
-        if (!res.ok) throw new Error(res.status);
+        body: body.toString()
+      }).then(function () {
         form.reset();
         okBox.setAttribute('data-show', 'true');
         okBox.focus();

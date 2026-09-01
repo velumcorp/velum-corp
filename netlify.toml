@@ -5,6 +5,10 @@
   publish = "site"
   command = ""
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [build.processing]
   skip_processing = false
 [build.processing.html]
@@ -18,7 +22,16 @@
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'"
+    # connect-src and form-action name docs.google.com because the contact form
+    # posts to Google Forms. Everything else stays locked to 'self'.
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self' https://docs.google.com; form-action 'self' https://docs.google.com; frame-ancestors 'self'; base-uri 'self'"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://identity.netlify.com; connect-src 'self' https://identity.netlify.com; font-src 'self'; frame-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'"
 
 # Fingerprint-free assets, so cache conservatively but usefully.
 [[headers]]
@@ -43,6 +56,12 @@
 
 # ----- Redirects -----------------------------------------------------------
 # Friendly URLs alongside the .html files.
+#
+# Note: pretty_urls above already strips ".html", so /gracias.html serves at
+# /gracias on its own. Do NOT add a /gracias -> /gracias.html rule: the two
+# rules redirect into each other and the page dies with ERR_TOO_MANY_REDIRECTS.
+# The Spanish-language aliases below are safe because the source and target
+# differ after the .html is stripped (/casas -> /houses, not /casas).
 [[redirects]]
   from = "/casas"
   to = "/houses.html"
@@ -54,8 +73,4 @@
 [[redirects]]
   from = "/contacto"
   to = "/contact.html"
-  status = 301
-[[redirects]]
-  from = "/gracias"
-  to = "/gracias.html"
   status = 301

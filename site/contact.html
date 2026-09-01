@@ -75,14 +75,20 @@
       </div>
 
       <div data-reveal>
+        <noscript>
+          <style>#contact-form { display: none; }</style>
+          <p class="formstate" data-show="true"
+             data-en="This form needs JavaScript. Please write to support@velumcorp.com instead.">Este formulario necesita JavaScript. Escríbenos a support@velumcorp.com.</p>
+        </noscript>
+
         <div class="formstate" id="form-ok" tabindex="-1" data-show="false" role="status"
              data-en="Message sent. We will come back to you shortly.">Mensaje enviado. Te respondemos en breve.</div>
         <div class="formstate" id="form-err" tabindex="-1" data-show="false" role="alert"
              data-en="The message could not be sent. Please write to support@velumcorp.com instead.">No se pudo enviar el mensaje. Escríbenos a support@velumcorp.com.</div>
 
-        <form id="contact-form" name="contacto" method="POST" action="/gracias.html"
-              data-netlify="true" netlify-honeypot="bot-field" novalidate>
-          <input type="hidden" name="form-name" value="contacto">
+        <!-- Posts to Google Forms. The endpoint and field ids live in
+             assets/js/velum-form-config.js, which is the only file to edit. -->
+        <form id="contact-form" name="contacto" method="POST" action="/gracias.html" novalidate>
           <p class="hp"><label>No rellenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
           <div class="field">
@@ -172,6 +178,7 @@
   </div>
 </footer>
 
+<script src="/assets/js/velum-form-config.js" defer></script>
 <script src="/assets/js/velum.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,215 @@
+/* ==========================================================================
+   VELUM ENTERPRISE - admin panel
+   A tool, not a page. It borrows the brand's palette and type so it feels like
+   the same company, but it is laid out for work: dense, quiet, no motion.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 300 600; font-display: swap;
+  src: url('/assets/fonts/montserrat-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cinzel'; font-style: normal; font-weight: 400 600; font-display: swap;
+  src: url('/assets/fonts/cinzel-latin.woff2') format('woff2');
+}
+
+:root {
+  --bone: #F4F0EE;
+  --blue: #0B1D34;
+  --blue-mid: #20344D;
+  --gold: #D4AF37;
+  --grey: #55585F;
+  --ground: #F4F0EE;
+  --panel: #FFFFFF;
+  --ink: #0B1D34;
+  --ink-soft: #55585F;
+  --rule: rgba(11, 29, 52, .16);
+  --rule-soft: rgba(11, 29, 52, .08);
+  --ok: #1E6B3A;
+  --err: #A3231C;
+  --bar-h: 56px;
+  --save-h: 64px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+[hidden] { display: none !important; }
+.muted { color: var(--ink-soft); }
+.pad { padding: 1.2rem; }
+.sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .6rem 1.1rem; border: 1px solid var(--blue); border-radius: 0;
+  background: var(--blue); color: var(--bone);
+  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap;
+  transition: background .2s, border-color .2s, opacity .2s;
+}
+.btn:hover:not(:disabled) { background: var(--blue-mid); border-color: var(--blue-mid); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
+.btn--ghost:hover:not(:disabled) { background: transparent; border-color: var(--ink); }
+
+/* ---------- signed out ---------- */
+.gate { min-height: 100dvh; display: grid; place-items: center; padding: 2rem; }
+.gate__card {
+  background: var(--panel); border: 1px solid var(--rule);
+  padding: clamp(2rem, 5vw, 3.5rem); max-width: 30rem; text-align: center;
+}
+.gate__card img { margin: 0 auto 2rem; display: block; max-width: 200px; height: auto; }
+.gate h1 {
+  font-family: 'Cinzel', Georgia, serif; text-transform: uppercase;
+  font-size: 1.4rem; letter-spacing: .06em; margin: 0 0 .6rem; font-weight: 400;
+}
+.gate p { margin: 0 0 1.6rem; }
+.note { font-size: 12px; margin-top: 1.2rem !important; min-height: 1.2em; }
+.note[data-kind="error"] { color: var(--err); }
+
+/* ---------- top bar ---------- */
+.bar {
+  height: var(--bar-h);
+  display: flex; align-items: center; gap: 1rem; justify-content: space-between;
+  padding: 0 1rem;
+  background: var(--blue); color: var(--bone);
+  position: sticky; top: 0; z-index: 10;
+}
+.bar__left { display: flex; align-items: center; gap: .6rem; flex: none; }
+.bar__left strong {
+  font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+}
+.bar__mid { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.bar__right { display: flex; align-items: center; gap: .8rem; flex: none; }
+.who { font-size: 12px; color: rgba(244,240,238,.72); }
+.bar .btn--ghost { color: var(--bone); border-color: rgba(244,240,238,.4); }
+.bar .btn--ghost:hover { border-color: var(--bone); }
+
+.bar select {
+  background: rgba(244,240,238,.08); color: var(--bone);
+  border: 1px solid rgba(244,240,238,.28); border-radius: 0;
+  padding: .45rem .6rem; font-size: 13px; max-width: 15rem;
+}
+.bar select option { background: #fff; color: var(--blue); }
+
+/* ---------- status ---------- */
+.status {
+  padding: .7rem 1rem; font-size: 13px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: #fff;
+}
+.status[data-kind="error"] { color: var(--err); border-left: 3px solid var(--err); }
+.status[data-kind="ok"]    { color: var(--ok);  border-left: 3px solid var(--ok); }
+.status[data-kind="busy"]  { color: var(--ink-soft); }
+
+/* ---------- work area ---------- */
+.work {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 1px;
+  background: var(--rule-soft);
+  height: calc(100dvh - var(--bar-h) - var(--save-h));
+}
+.panel { background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+.panel__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: .8rem 1rem; border-bottom: 1px solid var(--rule-soft); flex: none;
+}
+.panel__head h2 {
+  margin: 0; font-size: 11px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
+  font-family: 'Montserrat', sans-serif;
+}
+.panel__head input[type="search"] {
+  border: 1px solid var(--rule); border-radius: 0; padding: .4rem .6rem;
+  font-size: 13px; width: 12rem; background: #fff;
+}
+
+/* ---------- field list ---------- */
+.fields { overflow-y: auto; flex: 1; min-height: 0; }
+.field {
+  padding: .9rem 1rem; border-bottom: 1px solid var(--rule-soft);
+}
+.field[data-changed="true"] { background: #FFFDF3; border-left: 3px solid var(--gold); padding-left: calc(1rem - 3px); }
+.field[hidden] { display: none; }
+.field__meta {
+  display: flex; align-items: center; justify-content: space-between; gap: .6rem;
+  margin-bottom: .5rem;
+}
+.field__tag {
+  font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.field__jump {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-size: 11px; color: var(--ink-soft); text-decoration: underline;
+}
+.field__jump:hover { color: var(--ink); }
+.field__pair { display: grid; grid-template-columns: 2.2rem 1fr; gap: .4rem .6rem; align-items: start; }
+.field__lang {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em; color: var(--ink-soft);
+  padding-top: .55rem;
+}
+.field textarea {
+  width: 100%; border: 1px solid var(--rule); border-radius: 0;
+  padding: .5rem .6rem; font-size: 13px; line-height: 1.5;
+  resize: vertical; min-height: 2.4rem; background: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+.field textarea:focus { border-color: var(--blue); outline: none; }
+.field__html {
+  font-size: 11px; color: var(--ink-soft); grid-column: 2; margin: -.1rem 0 .2rem;
+}
+
+/* ---------- preview ---------- */
+.panel--preview { min-width: 0; }
+#preview { border: 0; width: 100%; flex: 1; min-height: 0; background: #fff; }
+.seg { display: inline-flex; border: 1px solid var(--rule); }
+.seg button {
+  background: transparent; border: 0; cursor: pointer;
+  padding: .3rem .55rem; font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  color: var(--ink-soft);
+}
+.seg button[aria-pressed="true"] { background: var(--blue); color: var(--bone); }
+
+/* ---------- save bar ---------- */
+.save {
+  height: var(--save-h);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0 1rem; background: var(--panel); border-top: 1px solid var(--rule);
+}
+.save__info { display: flex; align-items: center; gap: .8rem; font-size: 12px; min-width: 0; }
+.dirty { color: var(--gold); font-weight: 600; }
+.save__actions { display: flex; align-items: center; gap: .6rem; }
+.save__actions input {
+  border: 1px solid var(--rule); border-radius: 0; padding: .5rem .7rem;
+  font-size: 13px; width: 16rem; background: #fff;
+}
+
+/* ---------- narrow screens ---------- */
+@media (max-width: 900px) {
+  .work { grid-template-columns: 1fr; height: auto; }
+  .panel--preview { display: none; }
+  .bar { flex-wrap: wrap; height: auto; padding-block: .6rem; }
+  .bar__mid { order: 3; width: 100%; }
+  .bar select { max-width: none; flex: 1; }
+  .save { flex-wrap: wrap; height: auto; padding-block: .7rem; gap: .6rem; }
+  .save__actions { width: 100%; }
+  .save__actions input { flex: 1; width: auto; }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velum · Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B1D34">
+<link rel="stylesheet" href="/admin/admin.css">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+<!-- ===================== signed out ===================== -->
+<section id="gate" class="gate">
+  <div class="gate__card">
+    <img src="/assets/logo/velum-primary-blue.svg" alt="Velum Enterprise" width="200" height="89">
+    <h1>Panel de edición</h1>
+    <p class="muted">Entra con tu cuenta para editar las páginas del sitio.</p>
+    <button class="btn" id="login">Iniciar sesión</button>
+    <p class="note" id="gate-note"></p>
+  </div>
+</section>
+
+<!-- ===================== signed in ====================== -->
+<div id="app" hidden>
+
+  <header class="bar">
+    <div class="bar__left">
+      <img src="/assets/logo/icon.svg" alt="" width="26" height="26">
+      <strong>Panel de edición</strong>
+    </div>
+
+    <div class="bar__mid">
+      <label class="sr">Sitio</label>
+      <select id="site"></select>
+      <label class="sr">Página</label>
+      <select id="page"></select>
+    </div>
+
+    <div class="bar__right">
+      <span class="who" id="who"></span>
+      <button class="btn btn--ghost" id="logout">Salir</button>
+    </div>
+  </header>
+
+  <div class="status" id="status" hidden></div>
+
+  <main class="work">
+    <!-- editable fields -->
+    <section class="panel" aria-labelledby="fields-h">
+      <div class="panel__head">
+        <h2 id="fields-h">Textos de la página</h2>
+        <input type="search" id="filter" placeholder="Buscar texto…" aria-label="Buscar texto">
+      </div>
+      <div class="fields" id="fields">
+        <p class="muted pad">Elige una página para empezar.</p>
+      </div>
+    </section>
+
+    <!-- live preview -->
+    <section class="panel panel--preview" aria-labelledby="preview-h">
+      <div class="panel__head">
+        <h2 id="preview-h">Vista previa</h2>
+        <div class="seg" role="group" aria-label="Idioma de la vista previa">
+          <button type="button" data-prev-lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-prev-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+      <iframe id="preview" title="Vista previa de la página"></iframe>
+    </section>
+  </main>
+
+  <footer class="save">
+    <div class="save__info">
+      <span id="dirty" class="dirty" hidden>Cambios sin guardar</span>
+      <span id="saved" class="muted"></span>
+    </div>
+    <div class="save__actions">
+      <input type="text" id="summary" placeholder="Qué cambiaste (opcional)" aria-label="Resumen del cambio">
+      <button class="btn btn--ghost" id="revert" disabled>Descartar</button>
+      <button class="btn" id="save" disabled>Guardar y publicar</button>
+    </div>
+  </footer>
+</div>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>

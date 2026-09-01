@@ -47,15 +47,20 @@ site/                     everything that gets published
   assets/
     css/velum.css         the whole design system, one file
     js/velum.js           language, nav, scroll reveals, form
+    js/velum-form-config.js  the ONLY file to edit to wire up the contact form
     fonts/                Cinzel, Montserrat, Bodoni Moda italic (self-hosted woff2)
     img/                  photography and textures, webp at 900w and 1600w
     logo/                 Velum lockups, favicons
     logo/analopez/        AnaLopez Cosmetics' own lockups
     icon/                 the brand's house marks and the star
+  admin/                  the internal editing panel (see ADMIN.md)
+netlify/functions/        admin-api.js: loads and commits pages for the panel
+tools/google-form-ids.py  reads a Google Form and prints the contact form config
 squarespace/              generated, do not hand-edit
 build-squarespace.py      regenerates the above from site/
-netlify.toml              publish directory, headers, redirects
+netlify.toml              publish directory, functions, headers, redirects
 DNS.md                    Squarespace and Netlify records, and the conflict between them
+ADMIN.md                  the editing panel: setup, use, adding a subdomain
 ```
 
 ---
@@ -124,6 +129,20 @@ That way the site is fully readable and indexable with JavaScript disabled, and 
 primary audience. The trade-off is that search engines index the Spanish only; if English needs to
 rank independently it wants separate URLs, which is a bigger change.
 
+**The contact form posts to Google Forms.** Netlify Forms was the first
+implementation, but it caps at 100 submissions a month on the free tier and
+cannot work at all through Squarespace's code injection. Google Forms works in
+both places, puts responses in Workspace where the team already is, and needs no
+backend. The trade-off is that the endpoint is undocumented: it is a long-lived
+and widely used technique, not a supported API, so it could change without
+notice. Responses are also unfiltered for spam beyond the honeypot.
+
+**Editing is by attribute, not by content model.** The admin panel finds
+editable text by looking for `data-en`, which already marks every translatable
+string. That avoids restructuring the site into markdown collections and adding
+a build step, which is what an off-the-shelf CMS would have required, and which
+would have broken the Squarespace path.
+
 **Motion is gated.** Everything is IntersectionObserver or CSS scroll-driven animation. There is
 not a single scroll event listener. All of it collapses under `prefers-reduced-motion: reduce`,
 including the sticky hero, which reverts to a normal section.
@@ -136,7 +155,10 @@ including the sticky hero, which reverts to a normal section.
       `robots.txt`, and the JSON-LD block in `index.html`
 - [ ] Confirm the reply-time promise on `contact.html` ("two working days") is one you want to make
 - [ ] Decide Squarespace or Netlify, then follow the matching option in `DNS.md`
-- [ ] On Netlify, check the form submissions land somewhere: Forms → `contacto`
+- [ ] Wire up the contact form: build the Google Form, then run
+      `python tools/google-form-ids.py "<form url>"` and paste the result into
+      `site/assets/js/velum-form-config.js`
+- [ ] Set up the admin panel: follow `ADMIN.md` (Identity, GitHub token, invites)
 
 ## Still open
 

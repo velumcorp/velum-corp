@@ -53,15 +53,63 @@
       </div>
 
       <div data-reveal>
+        <noscript>
+          <style>#contact-form { display: none; }</style>
+          <p class="formstate" data-show="true"
+             data-en="This form needs JavaScript. Please write to support@velumcorp.com instead.">Este formulario necesita JavaScript. Escríbenos a support@velumcorp.com.</p>
+        </noscript>
+
         <div class="formstate" id="form-ok" tabindex="-1" data-show="false" role="status"
              data-en="Message sent. We will come back to you shortly.">Mensaje enviado. Te respondemos en breve.</div>
         <div class="formstate" id="form-err" tabindex="-1" data-show="false" role="alert"
              data-en="The message could not be sent. Please write to support@velumcorp.com instead.">No se pudo enviar el mensaje. Escríbenos a support@velumcorp.com.</div>
 
-        <!-- FORM: Netlify Forms does not run on Squarespace.
-     Delete this comment, add a Squarespace Form Block here,
-     and it will inherit the .field styles from velum.css. -->
-        <p class="muted"><a class="tlink" href="mailto:support@velumcorp.com">support@velumcorp.com</a></p>
+        <!-- Posts to Google Forms. The endpoint and field ids live in
+             assets/js/velum-form-config.js, which is the only file to edit. -->
+        <form id="contact-form" name="contacto" method="POST" action="/gracias.html" novalidate>
+          <p class="hp"><label>No rellenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+          <div class="field">
+            <label for="f-name" data-en="Name">Nombre</label>
+            <input id="f-name" name="nombre" type="text" required autocomplete="name">
+            <span class="field__err" data-en="Please enter your name.">Escribe tu nombre.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-mail" data-en="Email">Correo</label>
+            <input id="f-mail" name="correo" type="email" required autocomplete="email">
+            <span class="field__err" data-en="Please enter a valid email address.">Escribe un correo válido.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-org" data-en="Company or project">Empresa o proyecto</label>
+            <input id="f-org" name="empresa" type="text" autocomplete="organization">
+            <span class="field__help" data-en="Optional.">Opcional.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-house" data-en="Which house">Qué casa</label>
+            <select id="f-house" name="casa">
+              <option value="" data-en="Select the group">Selecciona el grupo</option>
+              <option value="grupo">Velum Enterprise</option>
+              <option value="travel">Velum Travel</option>
+              <option value="al">AnaLopez Cosmetics</option>
+              <option value="foods">Velum Foods</option>
+              <option value="trade">Velum Trade</option>
+              <option value="properties">Velum Properties</option>
+              <option value="mobility">Velum Mobility</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="f-msg" data-en="Message">Mensaje</label>
+            <textarea id="f-msg" name="mensaje" required></textarea>
+            <span class="field__err" data-en="Please write a message.">Escribe un mensaje.</span>
+          </div>
+
+          <button class="btn" type="submit" data-en="Write to us">Escríbenos</button>
+          <p class="formnote" data-en="We use what you send only to answer you. Nothing else.">Usamos lo que nos envías solo para responderte. Nada más.</p>
+        </form>
       </div>
     </div>
   </section>

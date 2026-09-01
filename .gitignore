@@ -1,0 +1,28 @@
+# Secrets. The admin panel's GitHub token lives in Netlify's environment
+# variables, never in this repository. These lines make it hard to change that
+# by accident.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+netlify.local.toml
+
+# Netlify build/runtime
+.netlify/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Node, if it is ever needed here
+node_modules/
