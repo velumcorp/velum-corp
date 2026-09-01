@@ -82,6 +82,29 @@ Delete all six records in the table above:
 - the `www` CNAME to `ext-sq.squarespace.com`
 - **the `@` HTTPS record** (this one is easy to miss)
 
+**If the registrar manages these as presets.** Squarespace Domains groups them into two separate
+presets, both labelled "Squarespace defaults":
+
+| Preset | Holds |
+|---|---|
+| 1 | the four `@` A records and the `www` CNAME |
+| 2 | the `@` HTTPS record, on its own |
+
+Applying a Netlify preset raises a **Conflicting preset** warning against preset 1. Choosing
+**Replace preset** is correct, and it clears preset 1 only. **Preset 2 survives the replace and
+must be deleted by hand.** Its `ipv4hint` still lists the four Squarespace IPs, so clients that
+honour SVCB records keep resolving to Squarespace: the site half-works, and the Netlify
+certificate never issues. This is the usual reason the move looks stuck.
+
+After replacing, re-read the zone and confirm three things:
+
+1. no `A` record points at `198.185.159.x` or `198.49.23.x`
+2. no `HTTPS` record remains on `@`
+3. **the MX and TXT records are untouched**, or mail to `support@velumcorp.com` stops
+
+Order matters: add the domain in Netlify *before* replacing the preset. If DNS points at Netlify
+before Netlify knows about the domain, the site is down for the gap instead of switching cleanly.
+
 ### 3. Add the Netlify records
 
 **Apex.** Netlify prefers an ALIAS, ANAME or flattened CNAME, because it follows the load
