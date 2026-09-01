@@ -9,6 +9,10 @@ It only works on the deployed site. Opening `/admin/` locally shows the login
 card and an error, because the login service and the save function both live on
 Netlify.
 
+While the site still has Netlify's password protection switched on, you will be
+asked for the site password first and the Velum login second. Two prompts, both
+expected. Turning the site password off at launch leaves only the second.
+
 ---
 
 ## What it can and cannot do
@@ -31,15 +35,23 @@ repository history.
 
 Four steps. All on the Netlify side except the token.
 
-### 1. Turn on Netlify Identity
+### 1. Turn on Netlify Identity, and use Google to sign in
 
 Site configuration → **Identity** → Enable Identity.
 
-Then under **Registration**, set it to **Invite only**. Do not leave it open,
-or anyone could create an account.
+Under **Registration**, set it to **Invite only**.
 
-If you want people to sign in with their Google Workspace account rather than a
-separate password: Identity → External providers → enable **Google**.
+Then, and this matters: Identity → **External providers** → add **Google**.
+
+**Sign in with Google, not with email and password.** Netlify Identity's
+invitation and confirmation emails are known to be unreliable and frequently
+never arrive, which blocks the email flow completely with no error to show for
+it. Google sign-in sends no email at all, so it cannot fail that way. It also
+means access follows the Workspace account: revoke someone's Workspace login and
+their access to this panel goes with it.
+
+The account is created on the person's first Google sign-in. There is nothing to
+invite and nothing to confirm.
 
 > Netlify Identity itself is current and supported. Its old companion, **Git
 > Gateway, is deprecated** and is not used here. This panel writes through its
@@ -70,20 +82,31 @@ Site configuration → Environment variables → add two:
 The token stays on Netlify's servers. It is never sent to the browser, which is
 why the panel needs a function at all rather than talking to GitHub directly.
 
-### 4. Invite the editors
+### 4. Give each person the editor role
 
-Identity → **Invite users** → enter their email addresses.
+Ask them to visit `/admin/` and sign in with Google once. They will get as far
+as a message saying the account has no editor role. That is expected: the
+sign-in created their user record, which is what you needed.
 
-Then, for each person once they have accepted, open their user record and edit
-**Roles**, adding:
+Now go to Identity → Users → their record → **Roles**, and add:
 
 ```
 editor
 ```
 
-**This is required.** An Identity account with no `editor` role can sign in but
-every load and save is refused. That is the second lock: losing control of an
-account is not the same as losing control of the site.
+**Then have them sign out and sign in again.** Roles are written into the
+session token at the moment it is issued, so a session started before the role
+was added still will not have it. This is the single most common "I added the
+role and it still does not work" — the fix is always a fresh sign-in.
+
+The role is required. An account without it can sign in but every load and save
+is refused: losing control of an account is not the same as losing control of
+the site.
+
+> Prefer not to hand out roles one by one? The alternative is to drop Identity
+> and verify a Google ID token directly in the function, allowing any
+> `@velumcorp.com` address. That removes invitations and roles entirely, at the
+> cost of rewriting the auth path. Worth doing if the editor list grows.
 
 ---
 
