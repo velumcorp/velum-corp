@@ -1,0 +1,61 @@
+# Velum Enterprise - Netlify configuration
+# Static site, no build step. Everything published lives in ./site
+
+[build]
+  publish = "site"
+  command = ""
+
+[build.processing]
+  skip_processing = false
+[build.processing.html]
+  pretty_urls = true
+
+# ----- Headers -------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; form-action 'self'; frame-ancestors 'self'; base-uri 'self'"
+
+# Fingerprint-free assets, so cache conservatively but usefully.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+# ----- Redirects -----------------------------------------------------------
+# Friendly URLs alongside the .html files.
+[[redirects]]
+  from = "/casas"
+  to = "/houses.html"
+  status = 301
+[[redirects]]
+  from = "/grupo"
+  to = "/about.html"
+  status = 301
+[[redirects]]
+  from = "/contacto"
+  to = "/contact.html"
+  status = 301
+[[redirects]]
+  from = "/gracias"
+  to = "/gracias.html"
+  status = 301

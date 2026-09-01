@@ -1,0 +1,14 @@
+{
+  "name": "Velum Enterprise",
+  "short_name": "Velum",
+  "description": "Grupo empresarial. La Habana, Cuba.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4F0EE",
+  "theme_color": "#0B1D34",
+  "icons": [
+    { "src": "/assets/logo/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/assets/logo/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/logo/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

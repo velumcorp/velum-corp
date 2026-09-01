@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="Contact - Velum Enterprise">Contacto - Velum Enterprise</title>
+<meta name="description" content="Escribe a Velum Enterprise. Alianzas, suministro, inmuebles, distribución y propuestas para cualquiera de las seis casas.">
+<meta name="theme-color" content="#0B1D34">
+<link rel="canonical" href="https://velum.enterprise/contact.html">
+
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Velum Enterprise">
+<meta property="og:title" content="Contacto - Velum Enterprise">
+<meta property="og:description" content="Alianzas, suministro, inmuebles, distribución y propuestas para cualquiera de las seis casas.">
+<meta property="og:image" content="/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/cinzel-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/montserrat-latin.woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/velum.css">
+</head>
+<body>
+
+<a class="skip" href="#main" data-en="Skip to content">Ir al contenido</a>
+
+<header class="masthead">
+  <div class="shell masthead__in">
+    <a class="brand" href="/" aria-label="Velum Enterprise">
+      <img class="logo-light" src="/assets/logo/velum-monogram.svg" alt="Velum Enterprise" width="50" height="34">
+      <img class="logo-dark" src="/assets/logo/velum-monogram-dark-bg.svg" alt="Velum Enterprise" width="50" height="34">
+    </a>
+    <nav class="nav" id="nav" aria-label="Principal" data-en-aria-label="Main">
+      <a href="/houses.html" data-en="Houses">Las casas</a>
+      <a href="/about.html" data-en="The group">El grupo</a>
+      <a href="/contact.html" aria-current="page" data-en="Contact">Contacto</a>
+    </nav>
+    <div class="utils">
+      <div class="lang" role="group" aria-label="Idioma" data-en-aria-label="Language">
+        <button type="button" data-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="nav"
+              aria-label="Menú" data-en-aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section>
+    <div class="shell contact__grid">
+      <div data-reveal>
+        <h1 data-en="Tell us what<br>you are building">Cuéntanos qué<br>estás construyendo</h1>
+        <p class="muted mt-l" data-en="Partnerships, supply, property, distribution, or a proposal that does not fit a box yet. Say which house it concerns and we will route it to the right people.">Alianzas, suministro, inmuebles, distribución o una propuesta que todavía no encaja en ninguna casilla. Dinos a qué casa se refiere y la hacemos llegar a quien corresponde.</p>
+
+        <dl class="dl mt-l">
+          <div>
+            <dt data-en="Email">Correo</dt>
+            <dd><a href="mailto:support@velumcorp.com">support@velumcorp.com</a></dd>
+          </div>
+          <div>
+            <dt data-en="Office">Oficina</dt>
+            <dd>La Habana, Cuba</dd>
+          </div>
+          <div>
+            <dt data-en="Reply time">Respuesta</dt>
+            <dd data-en="Within two working days.">En un plazo de dos días hábiles.</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div data-reveal>
+        <div class="formstate" id="form-ok" tabindex="-1" data-show="false" role="status"
+             data-en="Message sent. We will come back to you shortly.">Mensaje enviado. Te respondemos en breve.</div>
+        <div class="formstate" id="form-err" tabindex="-1" data-show="false" role="alert"
+             data-en="The message could not be sent. Please write to support@velumcorp.com instead.">No se pudo enviar el mensaje. Escríbenos a support@velumcorp.com.</div>
+
+        <form id="contact-form" name="contacto" method="POST" action="/gracias.html"
+              data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="contacto">
+          <p class="hp"><label>No rellenar <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+          <div class="field">
+            <label for="f-name" data-en="Name">Nombre</label>
+            <input id="f-name" name="nombre" type="text" required autocomplete="name">
+            <span class="field__err" data-en="Please enter your name.">Escribe tu nombre.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-mail" data-en="Email">Correo</label>
+            <input id="f-mail" name="correo" type="email" required autocomplete="email">
+            <span class="field__err" data-en="Please enter a valid email address.">Escribe un correo válido.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-org" data-en="Company or project">Empresa o proyecto</label>
+            <input id="f-org" name="empresa" type="text" autocomplete="organization">
+            <span class="field__help" data-en="Optional.">Opcional.</span>
+          </div>
+
+          <div class="field">
+            <label for="f-house" data-en="Which house">Qué casa</label>
+            <select id="f-house" name="casa">
+              <option value="" data-en="Select the group">Selecciona el grupo</option>
+              <option value="grupo">Velum Enterprise</option>
+              <option value="travel">Velum Travel</option>
+              <option value="al">AnaLopez Cosmetics</option>
+              <option value="foods">Velum Foods</option>
+              <option value="trade">Velum Trade</option>
+              <option value="properties">Velum Properties</option>
+              <option value="mobility">Velum Mobility</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="f-msg" data-en="Message">Mensaje</label>
+            <textarea id="f-msg" name="mensaje" required></textarea>
+            <span class="field__err" data-en="Please write a message.">Escribe un mensaje.</span>
+          </div>
+
+          <button class="btn" type="submit" data-en="Write to us">Escríbenos</button>
+          <p class="formnote" data-en="We use what you send only to answer you. Nothing else.">Usamos lo que nos envías solo para responderte. Nada más.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-hidden="true">
+    <img src="/assets/img/air-plain-1600.webp"
+         srcset="/assets/img/air-plain-900.webp 900w, /assets/img/air-plain-1600.webp 1600w"
+         sizes="100vw" width="1600" height="873" loading="lazy" decoding="async" alt="">
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__grid">
+      <div class="foot__brand">
+        <img src="/assets/logo/velum-primary-dark-bg.svg" alt="Velum Enterprise" width="200" height="89">
+        <p class="foot__tag" data-en="Discover &#183; Connect &#183; Transform">Descubrir &#183; Conectar &#183; Transformar</p>
+      </div>
+      <div>
+        <h2 data-en="Houses">Las casas</h2>
+        <ul>
+          <li><a href="/houses.html#travel">Velum Travel</a></li>
+          <li><a href="/houses.html#al">AnaLopez Cosmetics</a></li>
+          <li><a href="/houses.html#foods">Velum Foods</a></li>
+          <li><a href="/houses.html#trade">Velum Trade</a></li>
+          <li><a href="/houses.html#properties">Velum Properties</a></li>
+          <li><a href="/houses.html#mobility">Velum Mobility</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-en="Group">Grupo</h2>
+        <ul>
+          <li><a href="/about.html" data-en="Origin and values">Origen y valores</a></li>
+          <li><a href="/contact.html" data-en="Contact">Contacto</a></li>
+          <li><a href="mailto:support@velumcorp.com">support@velumcorp.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>&#169; <span data-year>2026</span> Velum Enterprise. <span data-en="Havana, Cuba.">La Habana, Cuba.</span></span>
+      <span data-en="The sky is the limit.">El cielo es el límite.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/velum.js" defer></script>
+</body>
+</html>

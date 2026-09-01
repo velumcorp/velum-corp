@@ -1,0 +1,833 @@
+/* ==========================================================================
+   VELUM ENTERPRISE - site system
+   Built on the VELUM Brand Kit v1.0 (2026). Tokens mirror 02_Color and 03_Type.
+   Palette proportion held to brand: bone dominates, blue anchors, gold once.
+   Shape system: radius 0 everywhere. The brand is stone, not soft plastic.
+   ========================================================================== */
+
+/* ---------- 1. Fonts (self-hosted, variable, latin + latin-ext) ---------- */
+@font-face {
+  font-family: 'Cinzel'; font-style: normal; font-weight: 400 600; font-display: swap;
+  src: url('../fonts/cinzel-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Cinzel'; font-style: normal; font-weight: 400 600; font-display: swap;
+  src: url('../fonts/cinzel-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 300 600; font-display: swap;
+  src: url('../fonts/montserrat-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 300 600; font-display: swap;
+  src: url('../fonts/montserrat-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* AL - Ana López display face. Loaded only for that house's own tagline,
+   which is the one place on the site that is not set in Velum's system. */
+@font-face {
+  font-family: 'Bodoni Moda'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url('../fonts/bodonimoda-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- 2. Tokens ---------- */
+:root {
+  /* brand values, verbatim from 02_Color */
+  --bone:       #F4F0EE;
+  --blue:       #0B1D34;
+  --gold:       #D4AF37;
+  --cream:      #E8DCC0;
+  --blue-mid:   #20344D;
+  --gold-deep:  #B8912B;
+  --pearl:      #DADDE3;
+  --grey:       #55585F;
+  --black:      #1A1A1A;
+
+  /* semantic, light is the brand default */
+  --ground:      var(--bone);
+  --ground-warm: var(--cream);
+  --ink:         var(--blue);
+  --ink-soft:    var(--grey);
+  --accent:      var(--gold);       /* graphics, rules, the star */
+  /* The kit nominates Oro Oscuro #B8912B as "gold that works as text on a light
+     ground", but it measures 2.60:1 on bone and fails AA. This is the same hue
+     and saturation carried down to 4.66:1, so small eyebrow type is readable.
+     #B8912B is kept below for rules and marks, where contrast is not a factor. */
+  --accent-text: #84681F;
+  --rule:        rgba(11, 29, 52, .16);
+  --rule-soft:   rgba(11, 29, 52, .09);
+  --panel-soft:  rgba(244, 240, 238, .70);
+  --err:         #A3231C;
+
+  color-scheme: light;
+
+  --shell: 1400px;
+  --gut: clamp(1.25rem, 5vw, 5rem);
+
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --dur: .7s;
+
+  /* type scale, 03_Type */
+  --fs-display: clamp(2.5rem, 7vw, 6.1rem);
+  --fs-h1:      clamp(2rem, 5vw, 3.7rem);
+  --fs-h2:      clamp(1.5rem, 3vw, 2.3rem);
+  --fs-h3:      clamp(1.05rem, 1.7vw, 1.35rem);
+  --fs-body:    clamp(1rem, .95rem + .28vw, 1.125rem);
+  --fs-label:   .72rem;
+  --fs-small:   .8rem;
+}
+
+/* Dark mode keeps brand fidelity: the blue becomes the ground, gold reads AAA on it. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground:      #081524;
+    --ground-warm: #0E2137;
+    --ink:         #F4F0EE;
+    --ink-soft:    #9EA9B7;
+    --accent-text: #D4AF37;
+    --rule:        rgba(244, 240, 238, .20);
+    --rule-soft:   rgba(244, 240, 238, .10);
+    --err:         #F0A9A4;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --ground:      #081524;
+  --ground-warm: #0E2137;
+  --ink:         #F4F0EE;
+  --ink-soft:    #9EA9B7;
+  --accent-text: #D4AF37;
+  --rule:        rgba(244, 240, 238, .20);
+  --rule-soft:   rgba(244, 240, 238, .10);
+  --err:         #F0A9A4;
+  color-scheme: dark;
+}
+
+/* ---------- 3. Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: clip; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* clip, not hidden: overflow-x:hidden makes the body a scroll container and
+     breaks position:sticky on the hero. clip contains the same overflow
+     without creating one. */
+  overflow-x: clip;
+}
+
+img, svg { max-width: 100%; display: block; }
+img { height: auto; }
+
+h1, h2, h3, .display {
+  font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+  text-wrap: balance;
+}
+h1, .display { font-size: var(--fs-display); line-height: 1.05; letter-spacing: .04em; }
+h2 { font-size: var(--fs-h1); line-height: 1.13; letter-spacing: .025em; }
+h3 { font-size: var(--fs-h2); line-height: 1.2;  letter-spacing: .02em; }
+p  { margin: 0 0 1.1em; max-width: 62ch; }
+p:last-child { margin-bottom: 0; }
+
+a { color: inherit; }
+::selection { background: #0B1D34; color: #F4F0EE; }
+
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: #0B1D34; color: #F4F0EE; padding: .8rem 1.2rem;
+  font-size: var(--fs-small); font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+}
+.skip:focus { left: 0; }
+
+/* ---------- 4. Layout primitives ---------- */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+section { padding-block: clamp(4.5rem, 11vh, 9rem); }
+.lede { font-size: clamp(1.08rem, 1.5vw, 1.3rem); font-weight: 300; line-height: 1.62; max-width: 42ch; }
+.muted { color: var(--ink-soft); }
+.mt-l { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* There is deliberately no eyebrow style. Section headings stand on their own;
+   a section's place on the page already tells the reader what it is. --fs-label
+   is still used by form labels, definition-list terms and footer headings,
+   which are functional labels rather than decoration. */
+
+hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+/* the star: the single gold mark */
+.star { width: .6em; height: .6em; flex: none; }
+
+/* ---------- 5. Buttons ---------- */
+.btn {
+  --btn-bg: #0B1D34;
+  --btn-ink: #F4F0EE;
+  --btn-bd: #0B1D34;
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .95rem 1.7rem;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  border: 1px solid var(--btn-bd);
+  border-radius: 0;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .35s var(--ease), color .35s var(--ease),
+              border-color .35s var(--ease), transform .18s var(--ease);
+}
+.btn:hover { --btn-bg: #20344D; --btn-bd: #20344D; }
+.btn:active { transform: translateY(1px); }
+
+.btn--ghost { --btn-bg: transparent; --btn-ink: var(--ink); --btn-bd: var(--rule); }
+.btn--ghost:hover { --btn-bg: transparent; --btn-ink: var(--ink); --btn-bd: var(--ink); }
+
+/* Dark mode inverts the solid button, otherwise a blue button on a blue
+   ground disappears. Label contrast stays above AA in both directions. */
+:root[data-theme='dark'] .btn:not(.btn--ghost) {
+  --btn-bg: #F4F0EE; --btn-ink: #0B1D34; --btn-bd: #F4F0EE;
+}
+:root[data-theme='dark'] .btn:not(.btn--ghost):hover { --btn-bg: #E8DCC0; --btn-bd: #E8DCC0; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .btn:not(.btn--ghost) {
+    --btn-bg: #F4F0EE; --btn-ink: #0B1D34; --btn-bd: #F4F0EE;
+  }
+  :root:not([data-theme='light']) .btn:not(.btn--ghost):hover { --btn-bg: #E8DCC0; --btn-bd: #E8DCC0; }
+}
+/* .on-dark sections are always dark, so they keep the light button in both modes */
+
+/* on photographic or blue grounds */
+.on-dark .btn { --btn-bg: #F4F0EE; --btn-ink: #0B1D34; --btn-bd: #F4F0EE; }
+.on-dark .btn:hover { --btn-bg: #fff; --btn-bd: #fff; }
+.on-dark .btn--ghost { --btn-bg: transparent; --btn-ink: #F4F0EE; --btn-bd: rgba(244,240,238,.5); }
+.on-dark .btn--ghost:hover { --btn-ink: #F4F0EE; --btn-bd: #F4F0EE; }
+
+/* text link, rule draws on hover */
+.tlink {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-size: var(--fs-small); font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; text-decoration: none;
+  padding-bottom: .35rem;
+  background-image: linear-gradient(var(--accent-text), var(--accent-text));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size .45s var(--ease);
+}
+.tlink:hover, .tlink:focus-visible { background-size: 100% 1px; }
+
+/* ---------- 6. Header ---------- */
+.masthead {
+  position: sticky; top: 0; z-index: 40;
+  background: color-mix(in srgb, var(--ground) 90%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid transparent;
+  transition: border-color .4s var(--ease);
+}
+.masthead[data-stuck='true'] { border-bottom-color: var(--rule-soft); }
+@supports not (backdrop-filter: blur(1px)) { .masthead { background: var(--ground); } }
+
+.masthead__in {
+  height: 72px;
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+}
+/* The monogram, not the primary lockup, carries the sticky bar: the primary
+   logo has a 180px minimum width that will not fit a 72px header, and the
+   monogram is the asset the manual assigns to exactly this use. */
+.brand { display: flex; align-items: center; text-decoration: none; flex: none; }
+.brand img { height: 34px; width: auto; }
+.brand .logo-dark { display: none; }
+:root[data-theme='dark'] .brand .logo-dark { display: block; }
+:root[data-theme='dark'] .brand .logo-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .brand .logo-dark { display: block; }
+  :root:not([data-theme='light']) .brand .logo-light { display: none; }
+}
+
+.nav { display: flex; align-items: center; gap: clamp(1rem, 2.2vw, 2.2rem); }
+.nav a {
+  font-size: var(--fs-label);
+  font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; color: var(--ink);
+  opacity: .7; transition: opacity .3s var(--ease), color .3s var(--ease);
+}
+.nav a:hover { opacity: 1; }
+.nav a[aria-current='page'] { opacity: 1; color: var(--accent-text); }
+
+.utils { display: flex; align-items: center; gap: .8rem; flex: none; }
+
+.lang { display: inline-flex; border: 1px solid var(--rule); }
+.lang button {
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: 11px; font-weight: 600; letter-spacing: .14em;
+  padding: .42rem .62rem; color: var(--ink-soft); line-height: 1;
+  transition: background .3s var(--ease), color .3s var(--ease);
+}
+.lang button:hover { color: var(--ink); }
+.lang button[aria-pressed='true'] { background: #0B1D34; color: #F4F0EE; }
+:root[data-theme='dark'] .lang button[aria-pressed='true'] { background: #F4F0EE; color: #0B1D34; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .lang button[aria-pressed='true'] { background: #F4F0EE; color: #0B1D34; }
+}
+
+.burger {
+  display: none; appearance: none; background: transparent; border: 1px solid var(--rule);
+  width: 42px; height: 38px; cursor: pointer; padding: 0; position: relative;
+}
+.burger span, .burger::before, .burger::after {
+  content: ''; position: absolute; left: 11px; right: 11px; height: 1px;
+  background: var(--ink); transition: transform .35s var(--ease), opacity .25s var(--ease);
+}
+.burger::before { top: 13px; }
+.burger span { top: 18.5px; }
+.burger::after { top: 24px; }
+.burger[aria-expanded='true']::before { transform: translateY(5.5px) rotate(45deg); }
+.burger[aria-expanded='true'] span { opacity: 0; }
+.burger[aria-expanded='true']::after { transform: translateY(-5.5px) rotate(-45deg); }
+
+@media (max-width: 940px) {
+  .burger { display: block; }
+  .nav {
+    position: fixed; inset: 72px 0 auto; z-index: 39;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--ground); border-bottom: 1px solid var(--rule);
+    padding: .5rem var(--gut) 1.8rem;
+    transform: translateY(-10px); opacity: 0; visibility: hidden;
+    transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
+  }
+  .nav[data-open='true'] { transform: none; opacity: 1; visibility: visible; }
+  .nav a { font-size: .95rem; letter-spacing: .12em; padding: .9rem 0;
+           border-bottom: 1px solid var(--rule-soft); opacity: 1; }
+}
+
+/* ---------- 7. Hero (media hero, left-aligned) ---------- */
+.hero {
+  position: relative; min-height: min(90dvh, 880px);
+  display: flex; align-items: flex-end;
+  padding: 0; overflow: hidden; isolation: isolate;
+}
+.hero__media { position: absolute; inset: 0; z-index: -3; }
+.hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 58%; }
+.hero__scrim {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(100deg, rgba(11,29,52,.95) 0%, rgba(11,29,52,.82) 32%, rgba(11,29,52,.34) 62%, rgba(11,29,52,.12) 100%),
+    linear-gradient(to top, rgba(11,29,52,.60) 0%, rgba(11,29,52,0) 42%);
+}
+.hero__veil {
+  position: absolute; inset: auto 0 0; z-index: -2; width: 100%; height: 64%;
+  opacity: .3; pointer-events: none;
+  mask-image: linear-gradient(to right, transparent, #000 48%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 48%);
+}
+.hero__in { width: 100%; padding-block: clamp(4rem, 12vh, 6rem) clamp(3.5rem, 9vh, 5.5rem); }
+.hero__copy { max-width: 44rem; }
+.hero h1 { color: #F4F0EE; }
+.hero .lede { color: rgba(244,240,238,.87); margin-top: 1.5rem; max-width: 33ch; }
+.hero__cta { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2.3rem; }
+
+/* ---------- 8. Origin (split editorial, veil line-drawing) ---------- */
+.origin__grid {
+  display: grid; gap: clamp(2.5rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  align-items: start;
+}
+.origin__aside { display: grid; gap: 2.4rem; }
+.origin__facet { display: grid; gap: .5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.origin__facet h3 { font-size: var(--fs-h3); letter-spacing: .16em; }
+.origin__facet p { font-size: .95rem; color: var(--ink-soft); max-width: 34ch; }
+.veilfig { margin-top: clamp(2.5rem, 5vw, 3.5rem); width: 100%; height: auto; }
+.veilfig path { fill: none; stroke: var(--accent); stroke-width: 1.5; opacity: .8; }
+@media (max-width: 880px) { .origin__grid { grid-template-columns: 1fr; } }
+
+/* ---------- 9. Manifesto (the one dark movement) ---------- */
+.manifesto {
+  position: relative; isolation: isolate; color: #F4F0EE;
+  background: #0B1D34;
+  padding-block: clamp(6rem, 17vh, 11rem);
+  text-align: center;
+}
+.manifesto__tex {
+  position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%;
+  object-fit: cover; opacity: .18;
+}
+.manifesto__lines { display: grid; gap: .4rem; max-width: 50rem; margin-inline: auto; }
+.manifesto__lines p {
+  max-width: none; margin: 0;
+  font-family: 'Cinzel', Georgia, serif; text-transform: uppercase;
+  font-size: clamp(1rem, 2.2vw, 1.75rem); line-height: 1.48; letter-spacing: .045em;
+  color: rgba(244,240,238,.95);
+}
+.manifesto__lines p.is-gap { height: clamp(.9rem, 2.6vw, 1.9rem); }
+.manifesto__sign {
+  margin-top: clamp(2.4rem, 6vw, 3.8rem);
+  display: inline-flex; align-items: center; gap: .8rem;
+  font-family: 'Cinzel', Georgia, serif; text-transform: uppercase;
+  letter-spacing: .22em; font-size: clamp(.92rem, 1.5vw, 1.12rem);
+  color: #D4AF37;
+}
+
+/* ---------- 10. Houses (asymmetric bento, real photography) ---------- */
+.houses__head { display: grid; gap: 1.3rem; max-width: 52rem; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.houses__grid {
+  display: grid; gap: clamp(.7rem, 1.1vw, 1rem);
+  grid-template-columns: repeat(6, 1fr);
+}
+/* six items, six cells, deliberate 4+2 / 2+4 / 3+3 rhythm */
+.house:nth-child(1) { grid-column: span 4; }
+.house:nth-child(2) { grid-column: span 2; }
+.house:nth-child(3) { grid-column: span 2; }
+.house:nth-child(4) { grid-column: span 4; }
+.house:nth-child(5) { grid-column: span 3; }
+.house:nth-child(6) { grid-column: span 3; }
+
+.house {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: clamp(15rem, 26vw, 23rem);
+  padding: clamp(1.3rem, 2vw, 2rem);
+  color: #F4F0EE; text-decoration: none;
+  background: #0B1D34;
+}
+.house__img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.86);
+  transition: transform 1.1s var(--ease), filter 1.1s var(--ease);
+}
+.house::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to top, rgba(11,29,52,.94) 0%, rgba(11,29,52,.66) 40%,
+              rgba(11,29,52,.22) 74%, rgba(11,29,52,.08) 100%);
+}
+.house:hover .house__img, .house:focus-visible .house__img { transform: scale(1.05); filter: saturate(1); }
+.house__name {
+  font-family: 'Cinzel', Georgia, serif; text-transform: uppercase;
+  font-size: clamp(1.02rem, 1.7vw, 1.45rem); letter-spacing: .08em; line-height: 1.22;
+}
+.house__desc { font-size: .89rem; color: rgba(244,240,238,.8); margin: .4rem 0 0; max-width: 30ch; }
+.house__crosses {
+  margin-top: 1rem; padding-top: .8rem; border-top: 1px solid rgba(244,240,238,.26);
+  font-size: .71rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: #E8DCC0; display: flex; flex-wrap: wrap; gap: .5rem;
+}
+.house__crosses b { font-weight: 600; color: rgba(244,240,238,.6); }
+@media (max-width: 1020px) {
+  .houses__grid { grid-template-columns: repeat(2, 1fr); }
+  .house:nth-child(n) { grid-column: span 1; }
+  .house:nth-child(1) { grid-column: span 2; }
+}
+@media (max-width: 640px) {
+  .houses__grid { grid-template-columns: 1fr; }
+  .house:nth-child(n) { grid-column: span 1; min-height: 16rem; }
+}
+
+/* ---------- 11. Statement ---------------------------------------------------
+   One idea at reading scale, then the qualifier. Used where a three-row
+   "purpose / vision / mission" table would otherwise appear: that belongs in a
+   brand deck, not on the website. */
+.stmt__lead {
+  font-family: 'Cinzel', Georgia, serif;
+  text-transform: none;
+  font-size: clamp(1.35rem, 2.6vw, 2.1rem);
+  line-height: 1.4; letter-spacing: .012em;
+  max-width: 26ch;
+  margin: clamp(1.8rem, 4vw, 2.6rem) 0 clamp(1.4rem, 3vw, 2rem);
+}
+.stmt > p:last-child { max-width: 52ch; font-size: 1.02rem; }
+
+/* ---------- 13. Values (grouped, sparse dividers) ---------- */
+.values__grid {
+  display: grid; gap: 0 clamp(2rem, 5vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  margin-top: clamp(1.8rem, 4vw, 2.8rem);
+}
+.value { padding: 1.7rem 0; border-top: 1px solid var(--rule-soft); }
+.value h3 { font-size: 1rem; letter-spacing: .18em; margin-bottom: .45rem; }
+.value p { font-size: .94rem; color: var(--ink-soft); max-width: 32ch; }
+
+/* ---------- 14. Full-bleed figure band ---------- */
+/* overflow:clip because the reveal starts these images at scale(1.06);
+   without it a full-bleed image is wider than the viewport and the page
+   scrolls sideways on a phone. */
+.band { padding-block: 0; overflow: clip; }
+.band figure { margin: 0; }
+/* Framed low in the image so the horizon and some ground stay in shot.
+   Centre-cropping these wide skies left nothing but cloud. */
+.band img {
+  width: 100%; height: clamp(16rem, 44vh, 28rem);
+  object-fit: cover; object-position: 50% 82%;
+}
+/* Images whose subject fills the frame are centred instead. */
+.band--mid img { object-position: 50% 50%; }
+.band figcaption { padding-top: 1rem; font-size: .85rem; color: var(--ink-soft); max-width: 46ch; }
+
+/* ---------- 15. Contact ---------- */
+.contact__grid {
+  display: grid; gap: clamp(2.5rem, 6vw, 5rem);
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  align-items: start;
+}
+/* The contact heading shares its row with the form, so it is sized to the
+   column rather than to the viewport. At display scale it overran the
+   column and lost its last letters. */
+.contact__grid h1 { font-size: clamp(1.9rem, 3.4vw, 2.9rem); }
+@media (max-width: 920px) {
+  .contact__grid { grid-template-columns: 1fr; }
+  .contact__grid h1 { font-size: var(--fs-h1); }
+}
+
+.field { display: grid; gap: .45rem; margin-bottom: 1.35rem; }
+.field label { font-size: var(--fs-label); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  font: inherit; font-size: 1rem; color: var(--ink);
+  background: transparent; border: 1px solid var(--rule); border-radius: 0;
+  padding: .85rem 1rem; width: 100%;
+  transition: border-color .3s var(--ease);
+}
+.field select {
+  appearance: none; background-image: none;
+  /* an opaque ground so the native popup inherits a readable pairing */
+  background-color: var(--ground);
+}
+.field option { background-color: var(--ground); color: var(--ink); }
+/* the prompt reads as placeholder text until a real choice is made */
+.field select:has(option[value=""]:checked) { color: var(--ink-soft); }
+.field textarea { min-height: 8.5rem; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-soft); opacity: .8; }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink-soft); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--ink); outline: none; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  outline: 2px solid var(--accent-text); outline-offset: 2px;
+}
+.field__help { font-size: .82rem; color: var(--ink-soft); }
+.field__err { font-size: .82rem; color: var(--err); font-weight: 500; display: none; }
+.field[data-invalid='true'] input,
+.field[data-invalid='true'] select,
+.field[data-invalid='true'] textarea { border-color: var(--err); }
+.field[data-invalid='true'] .field__err { display: block; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.formnote { font-size: .82rem; color: var(--ink-soft); margin-top: 1.1rem; max-width: 46ch; }
+.formstate {
+  display: none; padding: 1rem 1.25rem; border-left: 2px solid var(--accent);
+  background: var(--rule-soft); margin-bottom: 1.5rem; font-size: .95rem;
+}
+.formstate[data-show='true'] { display: block; }
+.btn[data-busy='true'] { opacity: .6; pointer-events: none; }
+
+.dl { display: grid; gap: 1.5rem; margin: 0; }
+.dl > div { display: grid; gap: .25rem; padding-top: 1.15rem; border-top: 1px solid var(--rule); }
+.dl dt { font-size: var(--fs-label); font-weight: 600; letter-spacing: .2em;
+         text-transform: uppercase; color: var(--ink-soft); }
+.dl dd { margin: 0; font-size: 1rem; }
+.dl a { text-decoration: none; border-bottom: 1px solid var(--rule); }
+.dl a:hover { border-bottom-color: var(--accent-text); }
+
+/* ---------- 16. Footer ---------- */
+.foot { background: #0B1D34; color: #F4F0EE; padding-block: clamp(3.5rem, 8vw, 5rem) 1.8rem; }
+.foot a { color: rgba(244,240,238,.78); text-decoration: none; transition: color .3s var(--ease); }
+.foot a:hover { color: #F4F0EE; }
+.foot__grid {
+  display: grid; gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
+}
+/* The footer is where the primary lockup gets its 180px minimum honoured. */
+.foot__brand img { width: 200px; max-width: 100%; height: auto; }
+.foot__tag { margin-top: 1.3rem; font-size: .93rem; color: var(--panel-soft); max-width: 30ch; }
+.foot h2 {
+  font-size: var(--fs-label); font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: #E8DCC0; margin: 0 0 1.1rem; font-family: 'Montserrat', sans-serif; line-height: 1.6;
+}
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; font-size: .91rem; }
+.foot__base {
+  margin-top: clamp(2.4rem, 6vw, 3.6rem); padding-top: 1.5rem;
+  border-top: 1px solid rgba(244,240,238,.16);
+  display: flex; flex-wrap: wrap; gap: .8rem 2rem; justify-content: space-between;
+  font-size: .79rem; color: var(--panel-soft);
+}
+@media (max-width: 780px) { .foot__grid { grid-template-columns: 1fr; } }
+
+/* ---------- 17. Houses page: detail rows ---------- */
+.hrow {
+  display: grid; gap: clamp(1.8rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--rule);
+}
+.hrow:first-of-type { border-top: 0; }
+.hrow--flip .hrow__media { order: 2; }
+.hrow__media { overflow: clip; }
+.hrow__media img { width: 100%; height: clamp(16rem, 38vw, 30rem); object-fit: cover; }
+.hrow__mark { width: 34px; height: 34px; margin-bottom: 1.3rem; }
+.hrow__meta { margin-top: 1.6rem; display: grid; gap: .8rem; }
+.hrow__meta div { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); gap: 1rem;
+                  padding-top: .8rem; border-top: 1px solid var(--rule-soft); font-size: .92rem; }
+.hrow__meta dt { font-size: var(--fs-label); font-weight: 600; letter-spacing: .18em;
+                 text-transform: uppercase; color: var(--ink-soft); }
+.hrow__meta dd { margin: 0; }
+@media (max-width: 900px) {
+  .hrow { grid-template-columns: 1fr; }
+  .hrow--flip .hrow__media { order: 0; }
+  .hrow__meta div { grid-template-columns: 1fr; gap: .2rem; }
+}
+
+/* ---------- 19. Motion ------------------------------------------------------
+   Four devices, each with a reason. Nothing here is decoration.
+
+   a. The hero pins and the page scrolls up over it, so the first gesture of
+      the site is a veil being drawn back off a horizon.
+   b. Headings rise out of a mask, one line at a time.
+   c. Manifesto words ink in as you pass through them, scrub-linked to scroll.
+      The manifesto is written to be read one line at a time; this makes the
+      reading pace visible instead of just asserting it.
+   d. Everything else fades up in reading order.
+
+   Where the browser supports scroll-driven animations the word fill is tied to
+   real scroll position, so it runs on the compositor with no JS and no scroll
+   listener. Where it does not, the same effect degrades to a timed cascade.
+   All of it collapses to static under prefers-reduced-motion.
+   -------------------------------------------------------------------------- */
+
+/* --- a. the curtain ------------------------------------------------------ */
+/* Opaque grounds so the sections genuinely occlude the pinned hero. */
+main > section { position: relative; z-index: 1; background: var(--ground); }
+main > section.play { background: var(--ground-warm); }
+main > section.manifesto { background: #0B1D34; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 768px) {
+    .hero { position: sticky; top: 0; z-index: 0; }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- d. reveals ------------------------------------------------------- */
+  [data-reveal] {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  [data-reveal].is-in { opacity: 1; transform: none; }
+
+  /* Photography settles rather than pops: it starts fractionally oversize and
+     comes to rest, which reads as the frame arriving, not the image. */
+  .house__img, .hrow__media img, .band img, .terr__item img {
+    transform: scale(1.06);
+    transition: transform 1.4s var(--ease), filter 1.1s var(--ease);
+  }
+  .is-in .house__img, .is-in.hrow .hrow__media img,
+  .band.is-in img, .is-in .terr__item img { transform: scale(1); }
+  .house:hover .house__img, .house:focus-visible .house__img { transform: scale(1.05); }
+
+  /* --- hero entrance ---------------------------------------------------- */
+  .hero__copy > * { opacity: 0; animation: rise .95s var(--ease) forwards; }
+  .hero__copy > :nth-child(1) { animation-delay: .15s; }
+  .hero__copy > :nth-child(2) { animation-delay: .38s; }
+  .hero__copy > :nth-child(3) { animation-delay: .56s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+  .hero__veil { opacity: 0; animation: veilin 2.4s var(--ease) .35s forwards; }
+  @keyframes veilin { to { opacity: .3; } }
+
+  /* --- b. heading line mask --------------------------------------------- */
+  /* Split by JS into .rl (the mask) wrapping .rl__i (the line that moves). */
+  /* Clip vertically only. overflow:hidden also clipped the ends of any
+     heading that ran wider than its column, silently cutting letters off.
+     A wide inset leaves the horizontal axis alone, and the top is left
+     open so Cinzel's accents (MAS ALLA) are never shaved. */
+  .rl { display: block; padding-bottom: .14em;
+        clip-path: inset(-0.45em -100vmax 0 -100vmax); }
+  .rl__i {
+    display: block;
+    transform: translateY(105%);
+    transition: transform 1s var(--ease);
+    transition-delay: calc(var(--l, 0) * 90ms);
+  }
+  .is-in .rl__i, .rl.is-in .rl__i { transform: none; }
+
+  /* --- the veil device draws itself ------------------------------------- */
+  .veilfig path { stroke-dasharray: 3000; stroke-dashoffset: 3000; }
+  .veilfig.is-in path { animation: draw 2.6s var(--ease) forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+}
+
+/* --- c. the manifesto ink fill -------------------------------------------- */
+/* Words carry --p, their position through the passage as a 0..1 number. */
+.manifesto__lines .w {
+  color: rgba(244, 240, 238, .20);
+  transition: color .55s var(--ease);
+}
+.manifesto__lines.is-in .w { color: rgba(244, 240, 238, .96); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Timed cascade. This is the fallback, and also what runs first everywhere. */
+  .manifesto__lines .w { transition-delay: calc(var(--p, 0) * 900ms); }
+
+  /* Scrub-linked, where the browser can do it: the fill tracks the scrollbar
+     rather than a timer, so the reader controls the pace. */
+  @supports (animation-timeline: view()) {
+    .manifesto__lines {
+      view-timeline-name: --manifesto;
+      view-timeline-axis: block;
+    }
+    .manifesto__lines .w {
+      transition: none;
+      color: rgba(244, 240, 238, .20);
+      animation: ink linear both;
+      animation-timeline: --manifesto;
+      /* each word owns a 22% slice of the passage, offset by its position */
+      animation-range: cover calc(4% + 52% * var(--p, 0))
+                       cover calc(26% + 52% * var(--p, 0));
+    }
+    /* .is-in must not short-circuit the scrubbed version */
+    .manifesto__lines.is-in .w { color: rgba(244, 240, 238, .20); }
+    @keyframes ink {
+      from { color: rgba(244, 240, 238, .20); }
+      to   { color: rgba(244, 240, 238, .96); }
+    }
+  }
+}
+
+/* --- reduced motion: everything arrives already finished ------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .veilfig path { stroke-dashoffset: 0; }
+  .hero__veil { opacity: .3; }
+  .manifesto__lines .w { color: rgba(244, 240, 238, .96); }
+  .rl__i { transform: none; }
+  .hero { position: static; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ---------- 20. Print ---------- */
+@media print {
+  .masthead, .hero__veil, .hero__scrim, .btn, .foot__base, .lang, .burger { display: none !important; }
+  body { background: #fff; color: #000; }
+  .house__img, .manifesto__tex { display: none; }
+  .manifesto, .foot, .house { background: #fff !important; color: #000 !important; }
+  .manifesto__lines p, .house__name, .house__desc { color: #000 !important; }
+  a { text-decoration: underline; }
+}
+
+/* ---------- 21. Territory strip (horizontal scroll-snap, five worlds) ---------- */
+.terr {
+  display: grid; grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 22rem);
+  gap: clamp(.7rem, 1.2vw, 1rem);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+}
+.terr::-webkit-scrollbar { height: 3px; }
+.terr::-webkit-scrollbar-track { background: var(--rule-soft); }
+.terr::-webkit-scrollbar-thumb { background: var(--accent); }
+.terr__item {
+  scroll-snap-align: start;
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: clamp(17rem, 30vw, 23rem);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 1.4rem; color: #F4F0EE; background: #0B1D34;
+}
+.terr__item img {
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%;
+  object-fit: cover; filter: saturate(.8);
+}
+.terr__item::after {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(11,29,52,.92) 0%, rgba(11,29,52,.55) 45%, rgba(11,29,52,.15) 100%);
+}
+.terr__item h3 { font-size: 1.15rem; letter-spacing: .16em; margin-bottom: .4rem; }
+.terr__item p { font-size: .89rem; color: rgba(244,240,238,.8); max-width: 26ch; margin: 0; }
+.terr__hint { font-size: .8rem; color: var(--ink-soft); margin-top: .8rem; }
+@media (min-width: 1500px) { .terr { grid-auto-columns: 1fr; overflow-x: visible; } .terr__hint { display: none; } }
+
+/* ---------- 22. AL - Ana López, the one house with its own logotype ----------
+   Velum's own manual: each house signs with its own voice, and no new logo is
+   ever drawn per sector. AL already has a full identity, so it signs with it.
+   Only the mark is borrowed; the page keeps Velum's palette and rhythm. */
+.hrow__houselogo { line-height: 0; }
+.hrow__houselogo img { width: min(300px, 78%); height: auto; }
+.hrow__houselogo .logo-dark { display: none; }
+:root[data-theme='dark'] .hrow__houselogo .logo-dark { display: block; }
+:root[data-theme='dark'] .hrow__houselogo .logo-light { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .hrow__houselogo .logo-dark { display: block; }
+  :root:not([data-theme='light']) .hrow__houselogo .logo-light { display: none; }
+}
+
+/* AL's own tagline, set in its own display face rather than Velum's Cinzel. */
+.hrow__tagline {
+  margin-top: 1.4rem;
+  font-family: 'Bodoni Moda', 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--ink-soft);
+}
+
+/* The bento tile keeps the wordmark only: the descriptor sits below it already. */
+.house__name--logo { line-height: 0; display: block; }
+.house__name--logo img { width: min(180px, 88%); height: auto; }
+
+/* ---------- 23. Gold on the cream ground -----------------------------------
+   #84681F clears AA on bone (4.66) but only reaches 3.88 on cream. No eyebrow
+   or text link sits on a cream section today, so nothing is failing; this
+   darkens the token inside .play anyway so that adding one later cannot
+   quietly introduce a contrast failure. 4.52 on cream, 5.43 on bone. */
+.play { --accent-text: #785E1C; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .play { --accent-text: #D4AF37; }
+}
+:root[data-theme='dark'] .play { --accent-text: #D4AF37; }
+
+/* ---------- 24. Prose pair -------------------------------------------------
+   Replaced the "what we are / what we are not" scorecards. Two paragraphs
+   side by side: a position stated, not a checklist scored. */
+.prose2 {
+  display: grid; gap: clamp(1.4rem, 4vw, 3.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  margin-top: clamp(2.2rem, 5vw, 3.4rem);
+  padding-top: clamp(1.8rem, 4vw, 2.6rem);
+  border-top: 1px solid var(--rule);
+}
+.prose2 p { font-size: 1.02rem; max-width: 46ch; }
