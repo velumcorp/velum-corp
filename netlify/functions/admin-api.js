@@ -52,6 +52,32 @@ const SITES = {
   */
 };
 
+/* GitHub's errors are unhelpful for the mistakes people actually make with
+   fine-grained tokens. Most importantly it answers 404, not 403, when the token
+   simply cannot see the repository, which reads as "the file is missing" and
+   sends you looking in entirely the wrong place. Translate before surfacing. */
+function explain(status, repo, path) {
+  if (status === 401) {
+    return 'GitHub rejected the token. It is wrong, revoked, or expired. ' +
+           'Generate a new one and update GITHUB_TOKEN in Netlify.';
+  }
+  if (status === 403) {
+    return 'The token reached GitHub but is not allowed to do this. Check it ' +
+           'has Repository permissions > Contents: Read and write.';
+  }
+  if (status === 404) {
+    return 'GitHub cannot see ' + repo + '/' + path + '. Almost always this ' +
+           'means the token was not granted access to that repository: edit ' +
+           'the token, set Repository access to "Only select repositories" ' +
+           'and pick ' + repo + '. (GitHub reports this as 404, not 403.)';
+  }
+  if (status === 409) {
+    return 'Someone else saved this page while you were editing. Reload to get ' +
+           'their version, then reapply your change.';
+  }
+  return 'GitHub returned ' + status + '.';
+}
+
 const json = (statusCode, body) => ({
   statusCode,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
@@ -82,7 +108,11 @@ function resolve(siteKey, pagePath) {
 
 exports.handler = async (event, context) => {
   if (!TOKEN) {
-    return json(500, { error: 'GITHUB_TOKEN is not set on this site.' });
+    return json(500, {
+      error: 'GITHUB_TOKEN is not set on this site. Add it under Site ' +
+             'configuration > Environment variables, then trigger a redeploy: ' +
+             'functions only pick up new variables at deploy time.'
+    });
   }
 
   /* Netlify verifies the Identity JWT before we ever see the request. */
@@ -118,7 +148,7 @@ exports.handler = async (event, context) => {
       `/repos/${OWNER}/${r.site.repo}/contents/${encodeURIComponent(path)}?ref=${r.site.branch}`
     );
     if (!res.ok) {
-      return json(res.status, { error: `GitHub said ${res.status} loading ${path}` });
+      return json(res.status, { error: explain(res.status, `${OWNER}/${r.site.repo}`, path) });
     }
     const data = await res.json();
     return json(200, {
@@ -169,15 +199,8 @@ exports.handler = async (event, context) => {
       }
     );
 
-    if (res.status === 409) {
-      return json(409, {
-        error: 'Someone else saved this page while you were editing. ' +
-               'Reload to get their version, then reapply your change.'
-      });
-    }
     if (!res.ok) {
-      const detail = await res.text();
-      return json(res.status, { error: `GitHub refused the save: ${detail.slice(0, 200)}` });
+      return json(res.status, { error: explain(res.status, `${OWNER}/${r.site.repo}`, path) });
     }
 
     const out = await res.json();

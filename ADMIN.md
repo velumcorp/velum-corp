@@ -39,9 +39,31 @@ Four steps. All on the Netlify side except the token.
 
 Site configuration → **Identity** → Enable Identity.
 
-Under **Registration**, set it to **Invite only**.
+**Do the next steps in this order.** Registration set to "Invite only" rejects a
+Google sign-in from someone who has never been invited, which lands you back on
+the broken invitation emails. So open the door, walk through it, then close it:
 
-Then, and this matters: Identity → **External providers** → add **Google**.
+1. Identity → **Registration** → set to **Open** for now
+2. Add the Google provider (below)
+3. Sign in at `/admin/` with Google. This creates your account.
+4. Identity → Users → your record → add the `editor` role
+5. Identity → Registration → set back to **Invite only**
+6. Sign out and back in, so your session carries the role
+
+The open window is safe: the site is still behind Netlify's password, and an
+account without the `editor` role can do nothing but see a refusal message.
+
+Now the provider itself. The setting is not
+directly under Identity; it is on the **Registration** tab inside it:
+
+**Identity → Registration → External providers → Add provider → Google**
+
+Direct link for this site:
+`https://app.netlify.com/projects/velum-corp/identity?tab=registration#external-providers`
+
+Google, GitHub, GitLab and Bitbucket providers are included on every Netlify
+plan, free tier included. Only custom email templates and audit logs need a paid
+plan, and neither is used here.
 
 **Sign in with Google, not with email and password.** Netlify Identity's
 invitation and confirmation emails are known to be unreliable and frequently
@@ -84,9 +106,13 @@ why the panel needs a function at all rather than talking to GitHub directly.
 
 ### 4. Give each person the editor role
 
-Ask them to visit `/admin/` and sign in with Google once. They will get as far
-as a message saying the account has no editor role. That is expected: the
-sign-in created their user record, which is what you needed.
+For everyone after you, registration is back on "Invite only", so invite them
+first (Identity → Invite users). If the invitation email does not arrive, which
+is likely, flip Registration to **Open** for the minute it takes them to sign in
+with Google, then set it back.
+
+Either way they end up at a message saying the account has no editor role. That
+is expected: the sign-in created their user record, which is what you needed.
 
 Now go to Identity → Users → their record → **Roles**, and add:
 

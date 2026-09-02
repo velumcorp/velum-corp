@@ -90,6 +90,12 @@
     });
   }
 
+  function escapeText(str) {
+    var d = document.createElement('div');
+    d.textContent = String(str);
+    return d.innerHTML;
+  }
+
   /* ============================ 2. status =============================== */
   function say(msg, kind) {
     var s = el('status');
@@ -111,10 +117,23 @@
       sel.innerHTML = state.sites
         .map(function (s) { return '<option value="' + s.key + '">' + s.key + '</option>'; })
         .join('');
+      sel.disabled = false;
+      el('page').disabled = false;
       sel.addEventListener('change', fillPages);
       el('page').addEventListener('change', loadPage);
       fillPages();
     }).catch(function (e) {
+      /* Leave the controls visibly out of action rather than as empty stubs,
+         which read as a broken layout instead of a failed load. */
+      ['site', 'page'].forEach(function (id) {
+        el(id).innerHTML = '<option>No disponible</option>';
+        el(id).disabled = true;
+      });
+      el('fields').innerHTML =
+        '<p class="muted pad">No se pudieron cargar las páginas.<br>' +
+        (/GITHUB_TOKEN/.test(e.message)
+          ? 'Falta configurar el acceso a GitHub en Netlify. Consulta ADMIN.md, pasos 2 y 3.'
+          : escapeText(e.message)) + '</p>';
       say(e.message, 'error');
       if (/role|sign in/i.test(e.message)) showGate(e.message, 'error');
     });
