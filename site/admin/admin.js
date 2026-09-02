@@ -31,7 +31,18 @@
     source: '', sha: null, spans: [], edits: {}, prevLang: 'es'
   };
 
-  /* ============================ 1. auth ================================= */
+  /* ============================ 1. auth =================================
+     On localhost the Identity widget cannot even read its settings: it asks the
+     deployed site, which sits behind Netlify's password and answers with an
+     HTML login page where JSON is expected. So local development talks to
+     tools/dev-server.py instead, which serves the same API against the files on
+     disk and needs no login.
+
+     This bypass is cosmetic and client-side only. It cannot be used to reach
+     the live site: Netlify validates the Identity token before the real
+     function runs, so a request without one never gets a user and is refused
+     server-side no matter what the browser claims. */
+  var LOCAL = ['localhost', '127.0.0.1', '::1'].indexOf(location.hostname) !== -1;
   var identity = window.netlifyIdentity;
 
   function showGate(msg, kind) {
@@ -41,35 +52,48 @@
     if (kind) note.setAttribute('data-kind', kind); else note.removeAttribute('data-kind');
   }
 
-  if (!identity) {
+  /* Branch, never return: everything below this point still has listeners to
+     register. An early return here silently leaves the save button wired to
+     nothing, which looks exactly like a working button that does not work. */
+  if (LOCAL) {
+    document.title = 'LOCAL · ' + document.title;
+    start({ email: 'modo local · sin sesión' });
+
+  } else if (!identity) {
     showGate('No se pudo cargar el inicio de sesión. Revisa la conexión.', 'error');
-    return;
+
+  } else {
+    /* If Identity cannot reach its endpoint the widget never fires 'init', and
+       a page that only reveals itself on init would sit blank forever. The gate
+       is the default view, and this only reports when init is late. */
+    var inited = false;
+    identity.on('init', function (user) {
+      inited = true;
+      user ? start(user) : showGate();
+    });
+    setTimeout(function () {
+      if (!inited) {
+        showGate(
+          'No se pudo contactar con el servicio de identidad. En local esto es ' +
+          'normal: el panel solo funciona en el sitio publicado.', 'error');
+      }
+    }, 4000);
+    identity.on('login', function (user) { identity.close(); start(user); });
+    identity.on('logout', function () { location.reload(); });
+    identity.on('error', function (e) { showGate(String(e && e.message || e), 'error'); });
+    identity.init();
   }
 
-  /* If Identity cannot reach its endpoint the widget never fires 'init', and a
-     page that only reveals itself on init would sit blank forever. The gate is
-     therefore the default view, and this only reports when init is late. */
-  var inited = false;
-  identity.on('init', function (user) {
-    inited = true;
-    user ? start(user) : showGate();
+  el('login').addEventListener('click', function () {
+    if (identity) identity.open('login');
   });
-  setTimeout(function () {
-    if (!inited) {
-      showGate(
-        'No se pudo contactar con el servicio de identidad. En local esto es ' +
-        'normal: el panel solo funciona en el sitio publicado.', 'error');
-    }
-  }, 4000);
-  identity.on('login', function (user) { identity.close(); start(user); });
-  identity.on('logout', function () { location.reload(); });
-  identity.on('error', function (e) { showGate(String(e && e.message || e), 'error'); });
-  identity.init();
-
-  el('login').addEventListener('click', function () { identity.open('login'); });
-  el('logout').addEventListener('click', function () { identity.logout(); });
+  el('logout').addEventListener('click', function () {
+    if (LOCAL) { location.reload(); return; }
+    identity.logout();
+  });
 
   function token() {
+    if (LOCAL) return Promise.resolve('local-dev');
     var u = identity.currentUser();
     return u ? u.jwt() : Promise.reject(new Error('No hay sesión.'));
   }
