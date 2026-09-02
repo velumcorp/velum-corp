@@ -74,6 +74,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
         super().__init__(*a, directory=str(SITE), **kw)
 
+    def end_headers(self):
+        # Never cache anything in development. A stale admin.js against a fresh
+        # index.html produces symptoms that look like logic bugs and are not.
+        self.send_header("Cache-Control", "no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        super().end_headers()
+
+    def send_head(self):
+        # SimpleHTTPRequestHandler answers 304 from If-Modified-Since, which
+        # defeats the header above. Strip the conditional so it always re-sends.
+        self.headers.replace_header("If-Modified-Since", "") if "If-Modified-Since" in self.headers else None
+        if "If-None-Match" in self.headers:
+            del self.headers["If-None-Match"]
+        return super().send_head()
+
     def log_message(self, fmt, *args):
         if API_PATH in (self.path or ""):
             sys.stderr.write("  admin  %s\n" % (fmt % args))
@@ -98,9 +113,47 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     # ------------------------------------------------------------------- GET
     def do_GET(self):
-        if not self.path.startswith(API_PATH):
+        if self.path.startswith(API_PATH):
+            return self._api_get()
+
+        from urllib.parse import urlparse
+        p = urlparse(self.path).path
+        if p.endswith(".html") or p.endswith("/") or p == "":
+            return self._html()
+        return super().do_GET()
+
+    def _html(self):
+        """Serve HTML with a version stamp on its local css and js.
+
+        No-store headers are not enough on their own: a browser will happily
+        reuse a cached stylesheet against freshly fetched markup, producing a
+        page that looks broken in ways the source cannot explain. Stamping each
+        link with the file's mtime makes a changed asset a different URL."""
+        from urllib.parse import urlparse
+        rel = urlparse(self.path).path.lstrip("/")
+        if rel == "" or rel.endswith("/"):
+            rel += "index.html"
+        f = SITE / rel
+        if not f.exists():
             return super().do_GET()
 
+        def stamp(m):
+            attr, url = m.group(1), m.group(2)
+            target = SITE / url.lstrip("/")
+            if not target.exists():
+                return m.group(0)
+            return '%s="%s?v=%d"' % (attr, url, int(target.stat().st_mtime))
+
+        html = re.sub(r'(href|src)="(/[^"]+\.(?:css|js))"', stamp,
+                      f.read_text(encoding="utf8"))
+        body = html.encode("utf8")
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _api_get(self):
         from urllib.parse import urlparse, parse_qs
         q = parse_qs(urlparse(self.path).query)
         path = (q.get("path") or [None])[0]

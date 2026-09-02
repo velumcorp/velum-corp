@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Velum · Admin</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml">
@@ -17,72 +17,85 @@
   <div class="gate__card">
     <img src="/assets/logo/velum-primary-blue.svg" alt="Velum Enterprise" width="200" height="89">
     <h1>Panel de edición</h1>
-    <p class="muted">Entra con tu cuenta para editar las páginas del sitio.</p>
+    <p class="muted">Entra con tu cuenta para editar el sitio.</p>
     <button class="btn" id="login">Iniciar sesión</button>
     <p class="note" id="gate-note"></p>
   </div>
 </section>
 
-<!-- ===================== signed in ====================== -->
+<!-- =====================  signed in  =====================
+     Template Forge's shape, reduced to two surfaces: the page itself, and an
+     inspector for whatever is selected. On a phone the inspector is a sheet
+     over the page; on a desktop it is a column beside it. The dock is fixed to
+     the bottom of the viewport in both. -->
 <div id="app" hidden>
 
   <header class="bar">
-    <div class="bar__left">
-      <img src="/assets/logo/icon.svg" alt="" width="26" height="26">
-      <strong>Panel de edición</strong>
+    <button class="bar__icon" id="pages" aria-label="Cambiar de página" title="Cambiar de página">&#9776;</button>
+    <div class="bar__title">
+      <strong id="page-name">—</strong>
+      <span class="bar__sub" id="who"></span>
     </div>
-
-    <div class="bar__mid">
-      <label class="sr">Sitio</label>
-      <select id="site" disabled><option>Cargando…</option></select>
-      <label class="sr">Página</label>
-      <select id="page" disabled><option>Cargando…</option></select>
+    <div class="seg" role="group" aria-label="Idioma de la vista previa">
+      <button type="button" data-prev-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-prev-lang="en" aria-pressed="false">EN</button>
     </div>
-
-    <div class="bar__right">
-      <span class="who" id="who"></span>
-      <button class="btn btn--ghost" id="logout">Salir</button>
-    </div>
+    <button class="bar__icon" id="logout" aria-label="Salir" title="Salir">&#9099;</button>
   </header>
 
   <div class="status" id="status" hidden></div>
 
-  <main class="work">
-    <!-- editable fields -->
-    <section class="panel" aria-labelledby="fields-h">
-      <div class="panel__head">
-        <h2 id="fields-h">Textos de la página</h2>
-        <input type="search" id="filter" placeholder="Buscar texto…" aria-label="Buscar texto">
-      </div>
-      <div class="fields" id="fields">
-        <p class="muted pad">Elige una página para empezar.</p>
-      </div>
-    </section>
-
-    <!-- live preview -->
-    <section class="panel panel--preview" aria-labelledby="preview-h">
-      <div class="panel__head">
-        <h2 id="preview-h">Vista previa</h2>
-        <div class="seg" role="group" aria-label="Idioma de la vista previa">
-          <button type="button" data-prev-lang="es" aria-pressed="true">ES</button>
-          <button type="button" data-prev-lang="en" aria-pressed="false">EN</button>
-        </div>
-      </div>
-      <iframe id="preview" title="Vista previa de la página"></iframe>
-    </section>
+  <!-- the canvas -->
+  <main class="stage">
+    <iframe id="preview" title="Vista previa de la página"></iframe>
+    <p class="stage__hint" id="hint">Toca cualquier texto o imagen de la página para editarlo.</p>
   </main>
 
-  <footer class="save">
-    <div class="save__info">
-      <span id="dirty" class="dirty" hidden>Cambios sin guardar</span>
-      <span id="saved" class="muted"></span>
+  <!-- the inspector -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="sheet" id="sheet" aria-labelledby="sheet-title" hidden>
+    <button class="sheet__grab" id="sheet-close" aria-label="Cerrar"><span></span></button>
+    <div class="sheet__head">
+      <h2 id="sheet-title">Textos</h2>
+      <input type="search" id="filter" placeholder="Buscar…" aria-label="Buscar texto" hidden>
     </div>
-    <div class="save__actions">
-      <input type="text" id="summary" placeholder="Qué cambiaste (opcional)" aria-label="Resumen del cambio">
-      <button class="btn btn--ghost" id="revert" disabled>Descartar</button>
-      <button class="btn" id="save" disabled>Guardar y publicar</button>
+    <div class="sheet__body" id="body"></div>
+  </aside>
+
+  <!-- always docked to the bottom of the viewport -->
+  <nav class="dock" aria-label="Herramientas">
+    <button data-view="text"     aria-pressed="false"><b>Aa</b><span>Textos</span></button>
+    <button data-view="sections" aria-pressed="false"><b>&#9776;</b><span>Secciones</span></button>
+    <button data-view="images"   aria-pressed="false"><b>&#9634;</b><span>Imágenes</span></button>
+    <button id="save" class="dock__save" disabled><b id="dirty-n">0</b><span id="save-label">Guardar</span></button>
+  </nav>
+
+  <!-- page switcher -->
+  <div class="modal" id="pages-modal" hidden>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="pages-title">
+      <h2 id="pages-title">Páginas</h2>
+      <label class="modal__label" for="site">Sitio</label>
+      <select id="site" disabled><option>Cargando…</option></select>
+      <div id="page-list" class="pagelist"></div>
+      <div class="modal__acts"><button class="btn btn--ghost" id="pages-cancel">Cerrar</button></div>
     </div>
-  </footer>
+  </div>
+
+  <!-- save confirmation -->
+  <div class="modal" id="save-modal" hidden>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="save-title">
+      <h2 id="save-title">Guardar y publicar</h2>
+      <p class="muted" id="save-summary"></p>
+      <label class="modal__label" for="summary">Qué cambiaste (opcional)</label>
+      <input type="text" id="summary" placeholder="Ej.: nuevo texto de portada">
+      <p class="muted small" id="saved"></p>
+      <div class="modal__acts">
+        <button class="btn btn--ghost" id="save-cancel">Cancelar</button>
+        <button class="btn btn--ghost" id="revert">Descartar</button>
+        <button class="btn" id="save-go">Publicar</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="/admin/admin.js"></script>

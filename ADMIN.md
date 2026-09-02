@@ -17,17 +17,42 @@ expected. Turning the site password off at launch leaves only the second.
 
 ## What it can and cannot do
 
-**Can:** edit any text on the four public pages, in both languages at once.
-There are 235 editable strings across the site: headlines, body copy, house
-descriptions, button labels, the manifesto, footer links.
+**Text.** Every string on the four public pages, Spanish and English edited as a
+pair. 235 of them: headlines, body copy, house descriptions, button labels, the
+manifesto, footer links.
 
-**Cannot:** change layout, colours, images, or add and remove sections. That is
-deliberate. An editor that can rearrange the page is an editor that can break
-it, and the whole point is that a non-designer can safely change wording without
-being able to damage the design.
+**Images.** Swap any photograph for another from the site's library. The whole
+family changes at once (the 900px and 1600px files, plus the width and height on
+the tag) so the page stays consistent.
+
+**Sections.** Reorder them, or hide one without deleting it. Reordering is
+refused on a page that has content sitting between its sections, because moving
+a section across that would drag unrelated content with it: `houses.html` is
+like this, so there you can hide but not move.
+
+**Cannot:** change colours, type, spacing or the design itself, add or delete
+sections, or edit anything outside the four listed pages. That boundary is the
+point. Someone should be able to change the site without being able to break how
+it looks.
 
 Every save is an ordinary git commit, so anything can be undone from the
 repository history.
+
+---
+
+## How it is laid out
+
+Two surfaces, borrowed from Template Forge and cut down: the page itself, and an
+inspector for whatever is selected.
+
+**Tap anything in the page to edit it.** A headline opens its text, an image
+opens the picker, anywhere else opens the section list. The dock along the bottom
+browses the same three things when you would rather work through a list.
+
+On a phone the inspector is a sheet over the page. On a desktop it is a column
+beside it. The dock is fixed to the bottom of the screen in both, so saving is
+always one reach away. It was built phone first, because that is where it will
+mostly be used.
 
 ---
 
@@ -140,16 +165,23 @@ the site.
 
 1. Go to `https://velumcorp.com/admin/`
 2. Sign in
-3. Pick the page from the dropdown at the top
-4. Edit. Changed fields are marked in gold down the left edge
-5. "Ver en la página" scrolls the preview to the text you are editing
-6. Optionally write a one-line note of what you changed
-7. **Guardar y publicar**
+3. Pick the page from the menu at the top left
+4. Tap what you want to change, or browse from the dock
+5. Edit. Anything changed is marked in gold down its left edge
+6. **Guardar** shows what will be published, then **Publicar**
 
-The preview shows your unsaved edits. The ES/EN buttons above it switch the
-preview language so you can check both.
+The page you are looking at is live: it shows your unsaved edits as you make
+them. The ES/EN buttons in the top bar switch its language so you can check
+both without saving.
 
-Leaving the page with unsaved changes asks for confirmation first.
+Leaving with unsaved changes asks for confirmation first.
+
+### Working offline
+
+`python tools/dev-server.py` then `http://localhost:8899/admin/` runs the whole
+panel against the files on disk, with no login and no Netlify. Saves go to your
+working tree rather than to git, so `git diff` shows them and `git checkout .`
+throws them away. Useful for trying something out before doing it for real.
 
 ### If two people edit at once
 

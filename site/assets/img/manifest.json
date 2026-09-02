@@ -1,0 +1,190 @@
+{
+ "images": [
+  {
+   "family": "air-plain",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Dos tercios de cielo",
+   "thumb": "/assets/img/air-plain-900.webp"
+  },
+  {
+   "family": "backlight-wall",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Sol detrás del muro",
+   "thumb": "/assets/img/backlight-wall-900.webp"
+  },
+  {
+   "family": "hero-threshold",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Figura en el umbral, amanecer",
+   "thumb": "/assets/img/hero-threshold-900.webp"
+  },
+  {
+   "family": "house-al",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 2385,
+   "label": "Frasco sobre muro de cal",
+   "thumb": "/assets/img/house-al-900.webp"
+  },
+  {
+   "family": "house-foods",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Materia prima sobre piedra",
+   "thumb": "/assets/img/house-foods-900.webp"
+  },
+  {
+   "family": "house-mobility",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Vehículo contra el sol bajo",
+   "thumb": "/assets/img/house-mobility-900.webp"
+  },
+  {
+   "family": "house-properties",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 2029,
+   "label": "Esquina de hormigón",
+   "thumb": "/assets/img/house-properties-900.webp"
+  },
+  {
+   "family": "house-trade",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 1986,
+   "label": "Muelle a contraluz",
+   "thumb": "/assets/img/house-trade-900.webp"
+  },
+  {
+   "family": "house-travel",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 2402,
+   "label": "Avión desde abajo",
+   "thumb": "/assets/img/house-travel-900.webp"
+  },
+  {
+   "family": "matter-apex",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Ápice de hormigón",
+   "thumb": "/assets/img/matter-apex-900.webp"
+  },
+  {
+   "family": "matter-cornice",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Cornisa contra el cielo",
+   "thumb": "/assets/img/matter-cornice-900.webp"
+  },
+  {
+   "family": "og",
+   "ext": "jpg",
+   "widths": [],
+   "w": 1200,
+   "h": 630,
+   "label": "Imagen para compartir",
+   "thumb": "/assets/img/og.jpg"
+  },
+  {
+   "family": "tex-concrete-blue",
+   "ext": "webp",
+   "widths": [],
+   "w": 1600,
+   "h": 900,
+   "label": "Textura, hormigón azul",
+   "thumb": "/assets/img/tex-concrete-blue.webp"
+  },
+  {
+   "family": "threshold-arch",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Vano de piedra",
+   "thumb": "/assets/img/threshold-arch-900.webp"
+  },
+  {
+   "family": "threshold-fog",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Niebla entre dos planos",
+   "thumb": "/assets/img/threshold-fog-900.webp"
+  },
+  {
+   "family": "threshold-slab",
+   "ext": "webp",
+   "widths": [
+    900,
+    1600
+   ],
+   "w": 1600,
+   "h": 873,
+   "label": "Losa vertical sobre la llanura",
+   "thumb": "/assets/img/threshold-slab-900.webp"
+  }
+ ]
+}
